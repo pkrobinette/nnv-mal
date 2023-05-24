@@ -19,6 +19,8 @@ end
 % Create ACAS Xu comparison table
 function acas_compare()
     % ACAS Xu comparison
+    max_cores = maxNumCompThreads;
+    used_cores = min([8,max_cores]);
     % Property 3
 
     % NNV
@@ -55,14 +57,14 @@ function acas_compare()
     fprintf(fid, '-------------------------------------------------------------------------------------------------\n');
     fprintf(fid, "Property 3 (45) \n");
     fprintf(fid, '-------------------------------------------------------------------------------------------------\n');
-    fprintf(fid, "            matlab    approx    relax 25%%    relax 50%%    relax 75%%    relax 100%%    exact (8)\n");
+    fprintf(fid, "            matlab    approx    relax 25%%    relax 50%%    relax 75%%    relax 100%%    exact (%d)\n",used_cores);
     fprintf(fid, " SAT          %d         %d           %d            %d            %d             %d           %d \n", p3_sat_mat, p3_sat_nnv);
     fprintf(fid, " UNSAT        %d        %d          %d            %d            %d             %d           %d \n", p3_unsat_mat, p3_unsat_nnv);
     fprintf(fid, " time (s)   %.4g    %.4g     %.4g        %.4g       %.4g       %.4g       %.4g \n\n",p3_time_mat, p3_time_nnv );
     fprintf(fid, '-------------------------------------------------------------------------------------------------\n');
     fprintf(fid, "Property 4 (45) \n");
     fprintf(fid, '-------------------------------------------------------------------------------------------------\n');
-    fprintf(fid, "            matlab    approx    relax 25%%    relax 50%%    relax 75%%    relax 100%%    exact (8)\n");
+    fprintf(fid, "            matlab    approx    relax 25%%    relax 50%%    relax 75%%    relax 100%%    exact (%d)\n",used_cores);
     fprintf(fid, " SAT          %d         %d           %d            %d            %d             %d           %d \n", p4_sat_mat, p4_sat_nnv);
     fprintf(fid, " UNSAT        %d         %d          %d            %d            %d             %d           %d \n", p4_unsat_mat, p4_unsat_nnv);
     fprintf(fid, " time (s)   %.4g    %.4g     %.4g        %.4g       %.4g       %.4g       %.4g \n", p4_time_mat, p4_time_nnv );
@@ -149,23 +151,23 @@ function other_compare()
 
     % TABLE 3 - RL, tllverify, oval 21
     oval = load("NNV_vs_MATLAB/oval21/results_oval21.mat");
-    ovalT = sum(oval.res(2,:))/length(oval.res(2,:));
-    ovalS = sum(oval.res(1,:) == 1);
-    ovalU = sum(oval.res(1,:) == 0);
+    ovalT = sum(oval.res(:,2))/length(oval.res(:,2));
+    ovalS = sum(oval.res(:,1) == 0);
+    ovalU = sum(oval.res(:,1) == 1);
     rl = load("NNV_vs_MATLAB/rl_benchmarks/results_rl.mat");
-    rlTm = sum(rl.res(2,:))/length(rl.res(2,:));
-    rlSm = sum(rl.res(1,:) == 1);
-    rlUm = sum(rl.res(1,:) == 0);
-    rlT = sum(rl.res(4,:))/length(rl.res(4,:));
-    rlS = sum(rl.res(3,:) == 1);
-    rlU = sum(rl.res(3,:) == 0);
+    rlTm = sum(rl.res(:,2))/length(rl.res(:,2));
+    rlSm = sum(rl.res(:,1) == 0);
+    rlUm = sum(rl.res(:,1) == 1);
+    rlT = sum(rl.res(:,4))/length(rl.res(:,4));
+    rlS = sum(rl.res(:,3) == 0);
+    rlU = sum(rl.res(:,3) == 1);
     tll = load("NNV_vs_MATLAB/tllverify/results_tllverify.mat");
-    tllTm = sum(tll.res(2,:))/length(tll.res(2,:));
-    tllSm = sum(tll.res(1,:) == 1);
-    tllUm = sum(tll.res(1,:) == 0);
-    tllT = sum(tll.res(4,:))/length(tll.res(4,:));
-    tllS = sum(tll.res(3,:) == 1);
-    tllU = sum(tll.res(3,:) == 0);
+    tllTm = sum(tll.res(:,2))/length(tll.res(:,2));
+    tllSm = sum(tll.res(:,1) == 0);
+    tllUm = sum(tll.res(:,1) == 1);
+    tllT = sum(tll.res(:,4))/length(tll.res(:,4));
+    tllS = sum(tll.res(:,3) == 0);
+    tllU = sum(tll.res(:,3) == 1);
     if is_codeocean()
         fid = fopen([path_results_codeocean, 'Table_3.txt'],'w'); 
     else
